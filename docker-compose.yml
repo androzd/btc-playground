@@ -1,0 +1,32 @@
+version: '3'
+services:
+  miner:
+    build: btc/.
+    ports:
+      - "18400:18443"
+      - "18500:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=hot-node:18444", "-addnode=cold-node:18444"]
+    volumes:
+      - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
+  hot-node:
+    build: btc/.
+    ports:
+      - "18402:18443"
+      - "18502:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=miner:18444", "-addnode=cold-node:18444"]
+    volumes:
+      - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
+  cold-node:
+    build: btc/.
+    ports:
+      - "18403:18443"
+      - "18503:18444"
+    expose: 
+      - "18444"
+    command: [ "-addnode=miner:18444", "-addnode=hot-node:18444"]
+    volumes:
+      - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
