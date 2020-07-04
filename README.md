@@ -16,7 +16,7 @@
 3. Запустить `watch -n _SECONDS_ 'curl -d \'{"jsonrpc":"2.0","id":"1","method":"generatetoaddress", "params":[1, "_ADDRESS_"]}\' -u user:password localhost:18400'`
 
 При повторных запусках только
-3. Запустить `watch -n _SECONDS_ 'curl -d \'{"jsonrpc":"2.0","id":"1","method":"generatetoaddress", "params":[1, "_ADDRESS_"]}\' -u user:password localhost:18400'`
+1. Запустить `watch -n _SECONDS_ 'curl -d \'{"jsonrpc":"2.0","id":"1","method":"generatetoaddress", "params":[1, "_ADDRESS_"]}\' -u user:password localhost:18400'`
 
 Проверку можно делать так: `curl -d '{"jsonrpc":"2.0","id":"1","method":"getaddressesbylabel", "params": ["mining"]}' -u user:password miner:18400`
 
