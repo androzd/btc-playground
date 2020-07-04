@@ -6,8 +6,6 @@
 
 Для генерации адреса, надо указывать явный тип адреса (p2sh-segwit)
 
-curl -d '{"jsonrpc":"2.0","id":"1","method":"getnewaddress", "params": ["", "p2sh-segwit"]}' -u user:password localhost:18400
-
 ## generator
 
 Здесь хранится скрипт генерации блоков и биткойнов на miner ноде, по сути какой-то bash скрипт, который внутри себя будет выпускать блоки.
