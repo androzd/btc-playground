@@ -1,3 +1,3 @@
-module go.mod
+module btc-faucet.drozd.by
 
 go 1.13
