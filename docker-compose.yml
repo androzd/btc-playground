@@ -1,15 +1,16 @@
 version: '3'
 services:
-  miner:
+  miner-node:
     build: btc/.
     ports:
       - "18400:18443"
       - "18500:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=hot-node:18444", "-addnode=cold-node:18444"]
+    command: ["-addnode=hot-node:18444", "-addnode=cold-node:18444"]
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
+      - "./btc/miner:/root/.bitcoin/miner:rw"
   hot-node:
     build: btc/.
     ports:
@@ -17,9 +18,10 @@ services:
       - "18502:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=miner:18444", "-addnode=cold-node:18444"]
+    command: ["-addnode=miner-node:18444", "-addnode=cold-node:18444"]
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
+      - "./btc/hot:/root/.bitcoin/hot:rw"
   cold-node:
     build: btc/.
     ports:
@@ -27,6 +29,12 @@ services:
       - "18503:18444"
     expose: 
       - "18444"
-    command: [ "-addnode=miner:18444", "-addnode=hot-node:18444"]
+    command: ["-addnode=miner-node:18444", "-addnode=hot-node:18444"]
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
+      - "./btc/cold:/root/.bitcoin/cold:rw"
+  faucet:
+    build: faucet/.
+    ports:
+      - "8333:8080"
+#    command: ["-addnode=miner:18444", "-addnode=hot-node:18444"]
