@@ -31,7 +31,6 @@ func MiningStatus(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Router возвращает HTTP-обработчик, который является точкой входа в API
 func Router() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/mining/start", MiningStart)
