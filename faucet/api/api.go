@@ -23,7 +23,7 @@ func MiningStop(w http.ResponseWriter, r *http.Request) {
 
 func MiningStatus(w http.ResponseWriter, r *http.Request) {
 	status := "false"
-	if (generator.StatusGeneratorRoutine()) {
+	if generator.StatusGeneratorRoutine() {
 		status = "true"
 	}
 	jsonResponse(w, map[string]string{
