@@ -2,14 +2,42 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.0/milligram.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu:400,700">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <link rel="stylesheet" href="/assets/css/styling.css">
     <title>Test</title>
 </head>
 <body>
-    <div id="app"></div>
-    <script src="/assets/js/index.js"></script>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container"><a class="navbar-brand" href="/"><span><img class="header-image"
+                                                                       src="/assets/img/logo/btc.svg" alt="logo"><span>Bitcoin Faucet</span></span></a>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="h3">Bitcoin Faucet</h1>
+    <hr>
+    <div class="card mb-3 shadow-sm">
+        <div class="card-header"><h2 class="h6 mb-0">Mining <span class="badge badge-success">Working</span></h2></div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md">
+                    <form method="POST" action="/api/mining/start"><button type="submit" class="btn btn-primary">Enable mining</button></form>
+                </div>
+                <div class="col-md">
+                    <form method="POST" action="/api/mining/stop"><button type="submit" class="btn btn-primary">Disable mining</button></form>
+                </div>
+                <div class="col-md">
+                    <!--<form method="POST" action="/api/mining/set-interval"><button type="submit" class="btn btn-primary">Set timeout</button></form>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
 </body>
 </html>
