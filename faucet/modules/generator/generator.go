@@ -1,7 +1,9 @@
-package services
+package generator
 
 import (
+	btc_client "btc-faucet.drozd.by/modules/btc-client"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -10,11 +12,15 @@ var generatorInterval = 1 * time.Second
 var stopChannel = make(chan bool)
 
 func StartGeneratorRoutine() {
-	doWork()
+	if !isGeneratorEnabled {
+		doWork()
+	}
 }
 
 func StopGeneratorRoutine() {
-	stopChannel <- true
+	if isGeneratorEnabled {
+		stopChannel <- true
+	}
 }
 
 func SetGeneratorInterval(duration time.Duration) {
@@ -22,22 +28,25 @@ func SetGeneratorInterval(duration time.Duration) {
 }
 
 func doWork() {
-	if isGeneratorEnabled {
-		fmt.Println( "Generator already enabled")
-		return
-	}
-
 	isGeneratorEnabled = true
 	go func() {
+		address, err := btc_client.GetAddressByLabelOrNew("mining")
+		if err != nil {
+			log.Fatal(err)
+		}
 		for {
 			select {
 			case <-time.After(generatorInterval):
+				err = btc_client.GenerateToAddress(1, address)
+				if err != nil {
+					log.Fatal(err)
+				}
 				fmt.Println("tick block generate")
-			case <- stopChannel:
+			case <-stopChannel:
 				fmt.Println("Stopping generator")
+				isGeneratorEnabled = false
 				return
 			}
 		}
 	}()
-	isGeneratorEnabled = false
 }

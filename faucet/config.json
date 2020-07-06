@@ -1,0 +1,7 @@
+{
+  "bitcoin-rpc": {
+    "url": "http://miner-node:18443",
+    "user": "user",
+    "password": "password"
+  }
+}

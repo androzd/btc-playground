@@ -6,6 +6,7 @@ services:
       - "18400:18443"
       - "18500:18444"
     expose: 
+      - "18443"
       - "18444"
     command: ["-addnode=hot-node:18444", "-addnode=cold-node:18444"]
     volumes:
@@ -16,7 +17,7 @@ services:
     ports:
       - "18402:18443"
       - "18502:18444"
-    expose: 
+    expose:
       - "18444"
     command: ["-addnode=miner-node:18444", "-addnode=cold-node:18444"]
     volumes:
@@ -37,4 +38,5 @@ services:
     build: faucet/.
     ports:
       - "8333:8080"
+
 #    command: ["-addnode=miner:18444", "-addnode=hot-node:18444"]
