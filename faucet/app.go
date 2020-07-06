@@ -1,16 +1,14 @@
 package main
 
 import (
-	"btc-faucet.drozd.by/modules/generator"
-	"encoding/json"
+	"btc-faucet.drozd.by/api"
+	"github.com/go-chi/chi"
 	"net"
 	"net/http"
-	"time"
+	"path/filepath"
 )
 
 func main() {
-	initHttpRoutes()
-
 	//fmt.Println("Start working. 1 second interval")
 	//generator.StartGeneratorRoutine()
 	//time.Sleep(time.Second * 5)
@@ -25,42 +23,20 @@ func main() {
 	listen()
 }
 
-func initHttpRoutes() {
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){http.ServeFile(w, r, "template/index.html")})
-	http.HandleFunc("/api/startmining", func(w http.ResponseWriter, r *http.Request){
-		generator.StartGeneratorRoutine()
-		response(w)
-	})
-	http.HandleFunc("/api/stopmining", func(w http.ResponseWriter, r *http.Request){
-		generator.StopGeneratorRoutine()
-		response(w)
-	})
-}
-
-func response(w http.ResponseWriter) {
-	response := map[string]string{"status":"ok"}
-
-	js, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-}
-
-
 func listen() {
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		panic(err)
 	}
-	server := &http.Server{
-		ReadTimeout:    60 * time.Second,
-		WriteTimeout:   60 * time.Second,
-		MaxHeaderBytes: 1 << 16,
-	}
-	server.Serve(listener)
+
+	router := chi.NewRouter()
+
+	staticPath, _ := filepath.Abs("./assets/")
+	fs := http.StripPrefix("/assets/", http.FileServer(http.Dir(staticPath)))
+	router.Handle("/assets/*", fs)
+
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){http.ServeFile(w, r, "assets/index.html")})
+	router.Mount("/api/", api.Router())
+
+	http.Serve(listener, router)
 }

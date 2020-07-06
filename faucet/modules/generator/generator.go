@@ -23,6 +23,10 @@ func StopGeneratorRoutine() {
 	}
 }
 
+func StatusGeneratorRoutine() bool {
+	return isGeneratorEnabled
+}
+
 func SetGeneratorInterval(duration time.Duration) {
 	generatorInterval = duration
 }
