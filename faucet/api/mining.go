@@ -15,7 +15,7 @@ func MiningStart(w http.ResponseWriter, r *http.Request) {
 func MiningStop(w http.ResponseWriter, r *http.Request) {
 	generator.StopGeneratorRoutine()
 	jsonResponse(w, map[string]string{
-		"status": getMiningStatusAsString(),
+		"status": "stopped",
 	})
 }
 

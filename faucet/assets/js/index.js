@@ -8,10 +8,9 @@ $(document).on('click', '[data-ajax-href]', (event) => {
         url: href,
         method: method,
         success: (result) => {
-            console.log(result.status)
+            setBadge(result.status)
         }
     });
-    console.log(href, method);
 })
 
 let setBadge = (status) => {
