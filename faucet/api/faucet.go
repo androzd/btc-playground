@@ -4,12 +4,22 @@ import (
 	btc_client "btc-faucet.drozd.by/modules/btc-client"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 )
 
 type SendToAddressRequest struct {
 	Address string `json:"address"`
 	Amount float64 `json:"amount"`
+}
+
+func round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
+}
+
+func toFixed(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(round(num * output)) / output
 }
 
 func FaucetSendToAddress(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +34,7 @@ func FaucetSendToAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	txid, err := btc_client.SendToAddress(request.Address, request.Amount)
+	txid, err := btc_client.SendToAddress(request.Address, toFixed(float64(request.Amount), 8))
 	if err != nil {
 		http.Error(w, "Unable to send money. Error: " + err.Error(), http.StatusBadRequest)
 		return
