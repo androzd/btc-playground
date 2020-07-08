@@ -8,8 +8,9 @@ import (
 )
 
 var isGeneratorEnabled = false
-var generatorInterval = 1 * time.Second
+var generatorInterval = 1 * time.Minute
 var stopChannel = make(chan bool)
+var addressGenerator = ""
 
 func StartGeneratorRoutine() {
 	if !isGeneratorEnabled {
@@ -31,20 +32,17 @@ func SetGeneratorInterval(duration time.Duration) {
 	generatorInterval = duration
 }
 
+func GetGeneratorInterval() time.Duration {
+	return generatorInterval
+}
+
 func doWork() {
 	isGeneratorEnabled = true
 	go func() {
-		address, err := btc_client.GetAddressByLabelOrNew("mining")
-		if err != nil {
-			log.Fatal(err)
-		}
 		for {
 			select {
 			case <-time.After(generatorInterval):
-				err = btc_client.GenerateToAddress(1, address)
-				if err != nil {
-					log.Fatal(err)
-				}
+				GenerateBlock()
 				fmt.Println("tick block generate")
 			case <-stopChannel:
 				fmt.Println("Stopping generator")
@@ -53,4 +51,24 @@ func doWork() {
 			}
 		}
 	}()
+}
+
+func GenerateBlock() {
+	addressGenerator = GetRefundAddress()
+	err := btc_client.GenerateToAddress(1, addressGenerator)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func GetRefundAddress() string {
+	if addressGenerator == "" {
+		address, err := btc_client.GetAddressByLabelOrNew("mining")
+		if err != nil {
+			log.Fatal(err)
+		}
+		addressGenerator = address
+	}
+
+	return addressGenerator
 }

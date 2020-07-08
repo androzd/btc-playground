@@ -2,6 +2,7 @@ package api
 
 import (
 	btc_client "btc-faucet.drozd.by/modules/btc-client"
+	"btc-faucet.drozd.by/modules/generator"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -36,12 +37,18 @@ func FaucetSendToAddress(w http.ResponseWriter, r *http.Request) {
 
 	txid, err := btc_client.SendToAddress(request.Address, toFixed(float64(request.Amount), 8))
 	if err != nil {
-		http.Error(w, "Unable to send money. Error: " + err.Error(), http.StatusBadRequest)
+		jsonErrorResponse(w, "Unable to send money. Error: " + err.Error())
 		return
 	}
 	jsonResponse(w, map[string]string{
 		"txid": txid,
 		"address": request.Address,
 		"amount": fmt.Sprintf("%.8f", request.Amount),
+	})
+}
+
+func FaucetInfo(w http.ResponseWriter, r *http.Request) {
+	jsonResponse(w, map[string]string{
+		"address": generator.GetRefundAddress(),
 	})
 }

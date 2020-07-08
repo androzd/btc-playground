@@ -67,16 +67,32 @@ let setBadge = (status) => {
         $badge.removeClass('badge-success').addClass('badge-danger');
     }
 }
-let updateBadge = () => {
+
+let setIntervalInfo = (interval) => {
+    let $interval = $('#interval-info');
+    $interval.text(interval);
+}
+let updateBadges = () => {
     $.ajax({
         url: '/api/mining/status',
         method: 'GET',
         success: (result) => {
             setBadge(result.status)
+            setIntervalInfo(result.interval)
+        }
+    })
+}
+let updateRefundAddress = () => {
+    $.ajax({
+        url: '/api/faucet/info',
+        method: 'GET',
+        success: (result) => {
+            $('#refundAddress').text(result.address)
         }
     })
 }
 setInterval(() => {
-    updateBadge()
+    updateBadges()
 }, 1000);
-updateBadge()
+updateBadges()
+updateRefundAddress()

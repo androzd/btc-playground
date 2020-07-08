@@ -9,17 +9,6 @@ import (
 )
 
 func main() {
-	//fmt.Println("Start working. 1 second interval")
-	//generator.StartGeneratorRoutine()
-	//time.Sleep(time.Second * 5)
-	//fmt.Println("Edit timer. 2 second interval")
-	//generator.SetGeneratorInterval(2 * time.Second)
-	//time.Sleep(time.Second * 5)
-	//fmt.Println("Send stop signal")
-	//generator.StopGeneratorRoutine()
-	//fmt.Println("Stop signal sent")
-	//return
-
 	listen()
 }
 
