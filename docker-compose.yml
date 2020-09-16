@@ -9,6 +9,9 @@ services:
       - BTCEXP_BITCOIND_PORT=18443
       - BTCEXP_BITCOIND_USER=user
       - BTCEXP_BITCOIND_PASS=password
+    networks:
+      - internal
+
   miner-node:
     build: btc/.
     ports:
@@ -21,6 +24,9 @@ services:
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
       - "./btc/miner:/root/.bitcoin/miner:rw"
+    networks:
+      - internal
+
   hot-node:
     build: btc/.
     ports:
@@ -32,6 +38,9 @@ services:
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
       - "./btc/hot:/root/.bitcoin/hot:rw"
+    networks:
+      - internal
+
   cold-node:
     build: btc/.
     ports:
@@ -43,7 +52,32 @@ services:
     volumes:
       - "./btc/bitcoin.conf:/root/.bitcoin/bitcoin.conf:ro"
       - "./btc/cold:/root/.bitcoin/cold:rw"
+    networks:
+      - internal
+
   faucet:
     build: faucet/.
     ports:
       - "8333:8080"
+    volumes:
+      - ${PWD}/faucet/config.json:/src/config.json
+    networks:
+      - internal
+
+  notificator:
+    build:
+      context: notificator/.
+    image: pg-notificator
+    ports:
+      - "12380:80"
+    environment:
+      NSQ_URI: "nsqd:4150"
+      NSQ_TOPIC: "cryptogate-btc-blockchain-events"
+    networks:
+      - internal
+      - processing_processing
+
+networks:
+  internal:
+  processing_processing:
+    external: true
