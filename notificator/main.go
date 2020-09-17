@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"os"
 	"pg-notificator/lib"
-	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -25,10 +25,16 @@ func scheduleTx(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 	message, err := json.Marshal(m)
 	if err != nil {
-		w.Write([]byte("Fuck!!!"))
+		_, err = w.Write([]byte("Not OK"))
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	log.Println(producer.Publish(os.Getenv("NSQ_TOPIC"), message))
-	w.Write([]byte("OK"))
+	_, err = w.Write([]byte("OK"))
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func scheduleBlock(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -39,9 +45,14 @@ func scheduleBlock(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	}
 	message, err := json.Marshal(m)
 	if err != nil {
-		w.Write([]byte("Fuck!!!"))
+		_, err = w.Write([]byte("Not OK"))
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	log.Println(producer.Publish(os.Getenv("NSQ_TOPIC"), message))
-	w.Write([]byte("OK"))
-
+	_, err = w.Write([]byte("OK"))
+	if err != nil {
+		log.Println(err)
+	}
 }
