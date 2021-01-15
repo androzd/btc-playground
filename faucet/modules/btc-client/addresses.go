@@ -22,7 +22,7 @@ func GetAddressesByLabel(label string) (response map[string]interface{}, err err
 func GetAddressByLabelOrNew(label string) (address string, err error) {
 	addresses, err := GetAddressesByLabel(label)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, label)
 		return
 	}
 	for k := range addresses {
