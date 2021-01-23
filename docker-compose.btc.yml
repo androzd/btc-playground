@@ -12,18 +12,6 @@ services:
     networks:
       - internal
 
-#  doge-explorer:
-#    build: btc-explorer/.
-#    ports:
-#      - "8889:3002"
-#    environment:
-#      - BTCEXP_BITCOIND_HOST=doge-miner-node
-#      - BTCEXP_BITCOIND_PORT=18443
-#      - BTCEXP_BITCOIND_USER=user
-#      - BTCEXP_BITCOIND_PASS=password
-#    networks:
-#      - internal
-
   btc-miner-node:
     build: nodes/btc/.
     ports:
@@ -67,64 +55,12 @@ services:
     networks:
       - internal
 
-  doge-miner-node:
-    build: nodes/doge/.
-    ports:
-      - "18410:18443"
-      - "18510:18444"
-    expose:
-      - "18443"
-      - "18444"
-    command: ["-addnode=doge-hot-node:18444", "-addnode=doge-cold-node:18444"]
-    volumes:
-      - "./nodes/doge/miner:/root/.dogecoin:rw"
-      - "./nodes/doge/dogecoin.conf:/root/.dogecoin/dogecoin.conf:ro"
-    networks:
-      - internal
-
-  doge-hot-node:
-    build: nodes/doge/.
-    ports:
-      - "18412:18443"
-      - "18512:18444"
-    expose:
-      - "18444"
-    command: ["-addnode=doge-miner-node:18444", "-addnode=doge-cold-node:18444"]
-    volumes:
-      - "./nodes/doge/hot:/root/.dogecoin:rw"
-      - "./nodes/doge/dogecoin.conf:/root/.dogecoin/dogecoin.conf:ro"
-    networks:
-      - internal
-
-  doge-cold-node:
-    build: nodes/doge/.
-    ports:
-      - "18413:18443"
-      - "18513:18444"
-    expose:
-      - "18444"
-    command: ["-addnode=doge-miner-node:18444", "-addnode=doge-hot-node:18444"]
-    volumes:
-      - "./nodes/doge/cold:/root/.dogecoin:rw"
-      - "./nodes/doge/dogecoin.conf:/root/.dogecoin/dogecoin.conf:ro"
-    networks:
-      - internal
-
   btc-faucet:
     build: faucet/.
     ports:
       - "8333:8080"
     volumes:
       - ${PWD}/faucet/btc-config.json:/app/config.json
-    networks:
-      - internal
-
-  doge-faucet:
-    build: faucet/.
-    ports:
-      - "8334:8080"
-    volumes:
-      - ${PWD}/faucet/doge-config.json:/app/config.json
     networks:
       - internal
 
