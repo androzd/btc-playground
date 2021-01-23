@@ -1,0 +1,69 @@
+version: '3'
+services:
+  ltc-explorer:
+    build: btc-explorer/.
+    ports:
+      - "8887:3002"
+    environment:
+      - BTCEXP_BITCOIND_HOST=ltc-miner-node
+      - BTCEXP_BITCOIND_PORT=18443
+      - BTCEXP_BITCOIND_USER=user
+      - BTCEXP_BITCOIND_PASS=password
+      - BTCEXP_COIN=LTC
+    networks:
+      - internal
+
+  ltc-miner-node:
+    build: nodes/ltc/.
+    ports:
+      - "18420:18443"
+      - "18520:18444"
+    expose: 
+      - "18443"
+      - "18444"
+    command: ["-regtest=1", "-addnode=ltc-hot-node:18444", "-addnode=ltc-cold-node:18444"]
+    volumes:
+      - "./nodes/ltc/miner:/root/.litecoin:rw"
+      - "./nodes/ltc/litecoin.conf:/root/.litecoin/litecoin.conf:ro"
+    networks:
+      - internal
+
+  ltc-hot-node:
+    build: nodes/ltc/.
+    ports:
+      - "18422:18443"
+      - "18522:18444"
+    expose:
+      - "18444"
+    command: ["-addnode=ltc-miner-node:18444", "-addnode=ltc-cold-node:18444"]
+    volumes:
+      - "./nodes/ltc/hot:/root/.litecoin:rw"
+      - "./nodes/ltc/litecoin.conf:/root/.litecoin/litecoin.conf:ro"
+    networks:
+      - internal
+
+  ltc-cold-node:
+    build: nodes/ltc/.
+    ports:
+      - "18423:18443"
+      - "18523:18444"
+    expose: 
+      - "18444"
+    command: ["-addnode=ltc-miner-node:18444", "-addnode=ltc-hot-node:18444"]
+    volumes:
+      - "./nodes/ltc/cold:/root/.litecoin:rw"
+      - "./nodes/ltc/litecoin.conf:/root/.litecoin/litecoin.conf:ro"
+    networks:
+      - internal
+
+  ltc-faucet:
+    build: faucet/.
+    ports:
+      - "8335:8080"
+    volumes:
+      - ${PWD}/faucet/ltc-config.json:/app/config.json
+    networks:
+      - internal
+
+networks:
+  internal:
