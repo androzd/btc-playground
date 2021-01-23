@@ -1,16 +1,18 @@
 version: '3'
 services:
-#  doge-explorer:
-#    build: btc-explorer/.
-#    ports:
-#      - "8889:3002"
-#    environment:
-#      - BTCEXP_BITCOIND_HOST=doge-miner-node
-#      - BTCEXP_BITCOIND_PORT=18443
-#      - BTCEXP_BITCOIND_USER=user
-#      - BTCEXP_BITCOIND_PASS=password
-#    networks:
-#      - internal
+  doge-explorer:
+    build: btc-explorer/.
+    ports:
+      - "8889:3002"
+    environment:
+      - BTCEXP_BITCOIND_HOST=doge-miner-node
+      - BTCEXP_BITCOIND_PORT=18443
+      - BTCEXP_BITCOIND_USER=user
+      - BTCEXP_BITCOIND_PASS=password
+      - BTCEXP_BITCOIND_TXSTATS_DISABLED=true
+      - BTCEXP_COIN=DOGE
+    networks:
+      - internal
 
   doge-miner-node:
     build: nodes/doge/.
