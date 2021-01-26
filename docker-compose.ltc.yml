@@ -2,14 +2,13 @@ version: '3'
 services:
   ltc-explorer:
     build: explorer/.
-    ports:
-      - "8887:3002"
     environment:
       - BTCEXP_BITCOIND_HOST=ltc-miner-node
       - BTCEXP_BITCOIND_PORT=18443
       - BTCEXP_BITCOIND_USER=user
       - BTCEXP_BITCOIND_PASS=password
       - BTCEXP_COIN=LTC
+      - PORT=80
     networks:
       - internal
 
@@ -58,8 +57,6 @@ services:
 
   ltc-faucet:
     build: faucet/.
-    ports:
-      - "8335:8080"
     volumes:
       - ${PWD}/faucet/ltc-config.json:/app/config.json
     networks:

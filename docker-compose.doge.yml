@@ -2,8 +2,6 @@ version: '3'
 services:
   doge-explorer:
     build: explorer/.
-    ports:
-      - "8889:3002"
     environment:
       - BTCEXP_BITCOIND_HOST=doge-miner-node
       - BTCEXP_BITCOIND_PORT=18443
@@ -11,6 +9,7 @@ services:
       - BTCEXP_BITCOIND_PASS=password
       - BTCEXP_BITCOIND_TXSTATS_DISABLED=true
       - BTCEXP_COIN=DOGE
+      - PORT=80
     networks:
       - internal
 
@@ -59,8 +58,6 @@ services:
 
   doge-faucet:
     build: faucet/.
-    ports:
-      - "8334:8080"
     volumes:
       - ${PWD}/faucet/doge-config.json:/app/config.json
     networks:

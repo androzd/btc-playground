@@ -13,7 +13,7 @@ func main() {
 }
 
 func listen() {
-	listener, err := net.Listen("tcp", ":8080")
+	listener, err := net.Listen("tcp", ":80")
 	if err != nil {
 		panic(err)
 	}

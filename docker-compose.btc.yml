@@ -2,13 +2,12 @@ version: '3'
 services:
   btc-explorer:
     build: explorer/.
-    ports:
-      - "8888:3002"
     environment:
       - BTCEXP_BITCOIND_HOST=btc-miner-node
       - BTCEXP_BITCOIND_PORT=18443
       - BTCEXP_BITCOIND_USER=user
       - BTCEXP_BITCOIND_PASS=password
+      - PORT=80
     networks:
       - internal
 
@@ -57,8 +56,6 @@ services:
 
   btc-faucet:
     build: faucet/.
-    ports:
-      - "8333:8080"
     volumes:
       - ${PWD}/faucet/btc-config.json:/app/config.json
     networks:
